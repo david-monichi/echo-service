@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  echo-service:
+  - apiVersion: v1
+    appVersion: 1.0.0
+    created: "2025-03-29T09:12:38.007551581+01:00"
+    description: Echo-Service helm chart
+    digest: 49be32b8d1b910a9f47b6e7ee058bfeb3f5a88ac41f73c0323d1740c481a5643
+    name: echo-service
+    urls:
+    - echo-service-1.0.0.tgz
+    version: 1.0.0
+generated: "2025-03-29T09:12:38.007028448+01:00"
