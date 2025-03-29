@@ -1,4 +1,4 @@
-run-name: Build, Test and Publish ${{ github.repository }}
+run-name: Package helm chart ${{ github.repository }}
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
       packages: write
 
     env:
-      BUILD_VERSION: "latest"
+      BUILD_VERSION: "1.0.0"
 
     steps:
       - name: Checkout
@@ -41,6 +41,6 @@ jobs:
       - name: Helm package and push
         shell: bash
         run: |
-          cd echo-service
-          helm package . --app-version "${BUILD_VERSION}" --version ${BUILD_VERSION}
+          echo ${BUILD_VERSION}
+          helm package ./echo-service --app-version "${BUILD_VERSION}" --version ${BUILD_VERSION}
           helm push ${PROJECT_NAME}-${BUILD_VERSION}.tgz oci://ghcr.io/${{ github.repository_owner }}/helm-charts
