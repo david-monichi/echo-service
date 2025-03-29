@@ -1,0 +1,46 @@
+run-name: Build, Test and Publish ${{ github.repository }}
+
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - '*.*.*'
+
+env:
+  SERVICE_NAME: ps-inetdb
+  PROJECT_PATH: .
+
+jobs:
+  helm-package:
+    name: Helm Package
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+
+    env:
+      BUILD_VERSION: "latest"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Install helm
+        uses: azure/setup-helm@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3.4.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Helm package and push
+        shell: bash
+        run: |
+          cd echo-service
+          helm package . --app-version "${BUILD_VERSION}" --version ${BUILD_VERSION}
+          helm push ${PROJECT_NAME}-${BUILD_VERSION}.tgz oci://ghcr.io/${{ github.repository_owner }}/helm-charts
