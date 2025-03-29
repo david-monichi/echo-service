@@ -8,8 +8,8 @@ on:
       - '*.*.*'
 
 env:
-  SERVICE_NAME: ps-inetdb
-  PROJECT_PATH: .
+  BUILD_VERSION: "1.0.0"
+  SERVICE_NAME: echo-service
 
 jobs:
   helm-package:
@@ -18,9 +18,6 @@ jobs:
 
     permissions:
       packages: write
-
-    env:
-      BUILD_VERSION: "1.0.0"
 
     steps:
       - name: Checkout
@@ -42,5 +39,5 @@ jobs:
         shell: bash
         run: |
           echo ${BUILD_VERSION}
-          helm package ./echo-service --app-version "${BUILD_VERSION}" --version ${BUILD_VERSION}
-          helm push ${PROJECT_NAME}-${BUILD_VERSION}.tgz oci://ghcr.io/${{ github.repository_owner }}/helm-charts
+          helm package ./${SERVICE_NAME} --app-version "${BUILD_VERSION}" --version ${BUILD_VERSION}
+          helm push ${SERVICE_NAME}-${BUILD_VERSION}.tgz oci://ghcr.io/${{ github.repository_owner }}/helm-charts
